@@ -2,7 +2,7 @@ package thoughtworks
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
-import thoughtworks.Analyzer._
+import thoughtworks.NewYorkTimesAnalyzer._
 
 object NewYorkTimes {
   def main(args: Array[String]): Unit = {

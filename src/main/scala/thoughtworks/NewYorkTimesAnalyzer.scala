@@ -3,33 +3,33 @@ package thoughtworks
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.DataTypes
 import org.apache.spark.sql.{Dataset, Row, SparkSession}
-import thoughtworks.AnalyzerUtils._
 
-object Analyzer {
+object NewYorkTimesAnalyzer {
 
   implicit class NYTDataframe(val nytDF: Dataset[Row]) {
 
     def totalQuantity(spark: SparkSession): Long = {
-      nytDF.countRows(spark)
+      nytDF.count()
     }
 
     def mergeIntegerAndDoublePrice(spark: SparkSession): Dataset[Row] = {
       import spark.implicits._
+
       val map = Map("doublePrice" -> 0.0, "intPrice" -> 0.0)
       val withNytPriceDF = nytDF
-        .addAColumn(spark,"doublePrice", nytDF.col("price.$numberDouble").cast("double"))
-        .addAColumn(spark,"intPrice", nytDF.col("price.$numberInt").cast("double"))
+        .withColumn("doublePrice", nytDF.col("price.$numberDouble").cast("double"))
+        .withColumn("intPrice", nytDF.col("price.$numberInt").cast("double"))
         .na
         .fill(map)
-        .addAColumn(spark,"nytprice", $"doublePrice" + $"intPrice")
+        .withColumn("nytprice", $"doublePrice" + $"intPrice")
 
       withNytPriceDF
-        .dropAColumn(spark, "doublePrice")
-        .dropAColumn(spark, "intPrice")
+        .drop("doublePrice")
+        .drop("intPrice")
     }
 
     def transformPublishedDate(spark: SparkSession): Dataset[Row] = {
-      nytDF.addAColumn(spark,"publishedDate",
+      nytDF.withColumn("publishedDate",
         nytDF.col("published_date.$date.$numberLong")./(1000)
           .cast(DataTypes.TimestampType)
           .cast(DataTypes.DateType)
@@ -37,15 +37,27 @@ object Analyzer {
     }
 
     def averagePrice(spark: SparkSession): Double = {
-      nytDF.averageOfAColumn(spark, "nytprice")
+      import spark.implicits._
+
+      val dataset: Dataset[Double] = nytDF.select(avg("nytprice")).as[Double]
+
+      dataset.collect()(0)
     }
 
     def minimumPrice(spark: SparkSession): Double = {
-      nytDF.minimumOfAColumn(spark, "nytprice")
+      import spark.implicits._
+
+      val dataset: Dataset[Double] = nytDF.select(min("nytprice")).as[Double]
+
+      dataset.collect()(0)
     }
 
     def maximumPrice(spark: SparkSession): Double = {
-      nytDF.maximumOfAColumn(spark, "nytprice")
+      import spark.implicits._
+
+      val dataset: Dataset[Double] = nytDF.select(max("nytprice")).as[Double]
+
+      dataset.collect()(0)
     }
 
     def totalBooksPublished(spark: SparkSession, inYear: String): Long = {
@@ -54,8 +66,8 @@ object Analyzer {
       val isSoldInYear = year($"publishedDate") === inYear
 
       nytDF.select($"publishedDate")
-        .filterAColumn(spark, isSoldInYear)
-        .countRows(spark)
+        .filter(isSoldInYear)
+        .count
     }
   }
 }
