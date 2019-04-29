@@ -1,14 +1,15 @@
-# semi-structured-data-transformations
+### semi-structured-data-transformations
 This repository has been built to help people learn how to work with semi-structured data sources with Spark+Scala.
 
-Analyze New York Times - Books dataset and write code for below operations:
+##### Analyze New York Times - Books dataset and write code for below operations:
 - count number of records
 - merge integer and double values in price column into new column
 - transform published date into readable format 
 - calculate average price
 - calculate min and max price
 - count number of books published in a year
-- drop a column
+
+##### Goal: Do code changes for above operations and make sure all the test cases pass.
 
 Dataset: src/main/resources/nyt2.json
 
@@ -30,13 +31,14 @@ Metadata: (Ref: https://www.kaggle.com/cmenca/new-york-times-hardcover-fiction-b
     amazon_product_url:The URL to the Amazon product page for this book
 
 
-Analyze Recipes dataset and write code for below operation:
+##### Analyze Recipes dataset and write code for below operation:
 
     Explode - The explode method allows you to split an array column into multiple rows, copying all the other columns into each new row.
 
 -  Split the column Ingredients into the column Ingredient, with one ingredient per row.
 -  Split the column Method into the column Steps, with one step per row.
   
+##### Goal: Do code changes for above operations 
 
 Dataset: src/main/resources/recipes.json
 
@@ -50,7 +52,7 @@ Metadata: (Ref: https://www.kaggle.com/gjbroughton/christmas-recipes)
     - Step by step method
     
 
-How to run spark program through Intellij?
+##### How to run spark program through Intellij?
 - Set main class as 
     org.apache.spark.deploy.SparkSubmit
 - Set program arguments as
