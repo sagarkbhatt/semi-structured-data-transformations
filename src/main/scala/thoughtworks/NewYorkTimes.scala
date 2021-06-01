@@ -31,5 +31,8 @@ object NewYorkTimes {
     println(f"The minimum price of books sold is $minimumPrice%1.2f")
     println(f"The maximum price of books sold is $maximumPrice%1.2f")
     println(s"The number of books published in year 2008 are $totalNumBooksPublished")
+
+    System.in.read()
+    spark.stop()
   }
 }

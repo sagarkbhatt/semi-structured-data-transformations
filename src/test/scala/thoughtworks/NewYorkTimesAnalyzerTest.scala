@@ -3,7 +3,6 @@ package thoughtworks
 import org.scalatest.{Ignore, Matchers}
 import thoughtworks.NewYorkTimesAnalyzer._
 
-@Ignore
 class NewYorkTimesAnalyzerTest extends FeatureSpecWithSpark with Matchers {
 
   import spark.implicits._
